@@ -60,12 +60,15 @@ def draw_box(canvas, proc, x_offset, y):
                 y + y_offset,
                 x_offset + bar_width,
                 y + y_offset + size,
-                fill="black"
+                fill="white",
+                width=5
             )
     label = tk.Label(root,
-                text= "Proc " + str(id) + "\nSize " + str(size)
+                text= "Proc " + str(id) + "\nSize " + str(size),
+                font=("TkDefaultFont","5")
             )
-    label.place(x = x_offset, y = y + y_offset)
+    label.place(x = x_offset+200, y = y + y_offset)
+    return (box, label)
 
 def start_CB(*proccess):
     global start_flag
@@ -93,7 +96,7 @@ root.geometry("900x800")
 root.title("Dynamic Memory Allocation");
 
 # Make canvas to draw blocks on
-canvas = tk.Canvas(root, width=500, height=500)
+canvas = tk.Canvas(root, width=500, height=500, bd=0)
 canvas.place(x=200, y=0)
 
 # Add blocks to canvas
@@ -127,15 +130,15 @@ blockSize = [25,25,25,25,50,50,100,200]
 
 #create the process list
 plist = []
-#for i in range(20):
-for i in range(4):
-    plist.append(proccessClass(i+1,np.random.randint(1,201), np.random.randint(1,11)))
+for i in range(20):
+    plist.append(proccessClass(i+1,np.random.randint(50,151), np.random.randint(1,11)))
 print("Initially create list")
 print("---------------------")
 for obj in plist:
     print(obj.PID, obj.size, obj.TTL)
 
 
+draw_list = []
 count = 0
 currProc_ff = 0
 currProc_bf = 0
@@ -172,15 +175,21 @@ while 1:
         worst_x  = 400
         y_offset = 100
 
+        # Delete drawn stuff
+        for i in draw_list:
+            canvas.delete(i[0])
+            i[1].destroy()
+
         # Display current memory allocation
         for i in plist:
             offset = 0
             for j in range(i.alloc-1):
                 offset += blockSize[j]
-            draw_box(canvas, i, first_x, offset)
+            draw_list.append(draw_box(canvas, i, first_x, offset))
 
 
         # Increment time
         count = count + 1
+        root.update()
         time.sleep(1)
 
