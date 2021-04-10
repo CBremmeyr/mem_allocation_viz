@@ -67,25 +67,26 @@ root.title("Dynamic Memory Allocation");
 
 # Make canvas to draw blocks on
 canvas = tk.Canvas(root, width=500, height=500)
-canvas.pack()
+canvas.place(x=200, y=0)
 
 # Add blocks to canvas
-first_bar_bg = canvas.create_rectangle(  0, 0, 100, 600, fill='red')
-best_bar_bg  = canvas.create_rectangle(200, 0, 300, 600, fill='red')
-worst_bar_bg = canvas.create_rectangle(400, 0, 500, 600, fill='red')
+first_bar_bg = canvas.create_rectangle(  0, 100, 100, 600, fill='red')
+best_bar_bg  = canvas.create_rectangle(200, 100, 300, 600, fill='red')
+worst_bar_bg = canvas.create_rectangle(400, 100, 500, 600, fill='red')
 
 # DEBUG: test drawing over other parts of the canvas
-test_box = canvas.create_rectangle(0, 0, 100, 50, fill='black')
+test_box = canvas.create_rectangle(0, 100, 200, 50, fill='black')
 
-first_label = tk.Label(root, text="First\nNext: ")
-best_label  = tk.Label(root, text="Best\nNext: ")
-worst_label = tk.Label(root, text="Worst\nNext: ")
+first_label = tk.Label(root, text="First\n  Next: ")
+best_label  = tk.Label(root, text="Best\n  Next: ")
+worst_label = tk.Label(root, text="  Worst\n  Next: ")
 time_label  = tk.Label(root, text="Time: ")
 
-first_label.place(relx=0.22, rely=0.63)
-best_label.place( relx=0.44, rely=0.63)
-worst_label.place(relx=0.66, rely=0.63)
-time_label.place( relx=0.50, rely=0.90)
+first_label.place(x=200, y=500)
+best_label.place(x=400, y=500)
+worst_label.place(x=600, y=500)
+time_label.place(x=400, y=600)
+#time_label.place( relx=0.50, rely=0.90)
 
 btnTop = 400
 btnLeft = 20
@@ -113,7 +114,7 @@ blockSize = [5,10,15,20]
 #create the process list
 plist = []
 for i in range(20):
-    plist.append(proccessClass(i+1,np.random.randint(1,1001), np.random.randint(1,10))) 
+    plist.append(proccessClass(i+1,np.random.randint(1,1001), np.random.randint(1,10)))
 print("Initially create list")
 print("---------------------")
 for obj in plist:
@@ -132,10 +133,10 @@ while 1:
 
         ########################################
         # Do back end stuff here
-      
+
         firstFit(blockSize, len(blockSize), plist[0].size, 1)
-        
-        
+
+
         ########################################
 
         # Remove finished processes
