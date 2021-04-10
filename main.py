@@ -5,7 +5,12 @@ import numpy as np
 import tkinter as tk
 from tkinter import ttk
 
-# Function to allocate memory to
+class proccessClass:
+    def __init__(self, p_pID, p_size, p_time):
+        self.pID  = p_pID
+        self.size = p_size
+        self.time = p_time
+
 # blocks as per First fit algorithm
 # This function was created by geeksforgeeks
 #       https://www.geeksforgeeks.org/program-first-fit-algorithm-memory-management
@@ -31,10 +36,10 @@ def firstFit(blockSize, m, processSize, n):
 
                 break
 
-    print(" Process No. Process Size      Block no.")
+    print(" Process No.\tProcess Size\tBlock no.")
     for i in range(n):
-        print(" ", i + 1, "         ", processSize[i],
-                          "         ", end = " ")
+        print(" ", i + 1, "\t\t", processSize[i],
+                          "\t\t", end = " ")
         if allocation[i] != -1:
             print(allocation[i] + 1)
         else:
@@ -102,6 +107,19 @@ for i in range(len(str_seq)):
     proc_seq[i] = int(str_seq[i])
 print(proc_seq)
 
+#create memory blocks
+blockSize = [5,10,15,20]
+
+#create the process list
+plist = []
+for i in range(20):
+    plist.append(proccessClass(i+1,np.random.randint(1,1001), np.random.randint(1,10))) 
+print("Initially create list")
+print("---------------------")
+for obj in plist:
+    print(obj.pID, obj.size, obj.time)
+
+
 count = 0
 while 1:
     try:
@@ -110,15 +128,14 @@ while 1:
     except:
         quit(0)
 
-    if start_flag == 1:
+    if start_flag == 1 and count < len(plist):
 
         ########################################
         # Do back end stuff here
-
-
-
-
-
+      
+        firstFit(blockSize, len(blockSize), plist[0].size, 1)
+        
+        
         ########################################
 
         # Remove finished processes
