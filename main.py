@@ -45,12 +45,14 @@ def firstFit(blockSize, m, proc):
                       "\t\t", end = " ")
     if proc.alloc != -1:
         print(proc.alloc + 1)
+        return 0
     else:
         print("Not Allocated")
+        return -1
 
 def draw_box(canvas, proc, x_offset, y):
     size = proc.size
-    id = proc.pid
+    id = proc.PID
     y_offset = 100
     bar_width = 100
     box = canvas.create_rectangle(
@@ -61,7 +63,7 @@ def draw_box(canvas, proc, x_offset, y):
                 fill="black"
             )
     label = tk.Label(root,
-                text= "Proc " + id + "\nSize " + size
+                text= "Proc " + str(id) + "\nSize " + str(size)
             )
     label.place(x = x_offset, y = y + y_offset)
 
@@ -125,7 +127,8 @@ blockSize = [25,25,25,25,50,50,100,200]
 
 #create the process list
 plist = []
-for i in range(20):
+#for i in range(20):
+for i in range(4):
     plist.append(proccessClass(i+1,np.random.randint(1,201), np.random.randint(1,11)))
 print("Initially create list")
 print("---------------------")
@@ -134,6 +137,9 @@ for obj in plist:
 
 
 count = 0
+currProc_ff = 0
+currProc_bf = 0
+currProc_wf = 0
 while 1:
 
     if quit_flag == 1:
@@ -145,15 +151,18 @@ while 1:
     except:
         quit(0)
 
-    if start_flag == 1 and count < len(plist):
+    if start_flag == 1 and currProc_ff < len(plist):
 
         ########################################
         # Do back end stuff here
 
-        runProccess(blockSize, plist);
+        runProccess(blockSize, plist)
         print(blockSize)
-        firstFit(blockSize, len(blockSize), plist[count])
+        ret = firstFit(blockSize, len(blockSize), plist[currProc_ff])
         print(blockSize)
+
+        if ret == 0:
+            currProc_ff += 1
 
         ########################################
 
@@ -164,15 +173,12 @@ while 1:
         y_offset = 100
 
         # Display current memory allocation
-#        for i in first_plist:
-#            draw_box(canvas, first_x, y, i.size)
+        for i in plist:
+            offset = 0
+            for j in range(i.alloc-1):
+                offset += blockSize[j]
+            draw_box(canvas, i, first_x, offset)
 
-#        if count == 1:
-#            draw_box(canvas, first_x, 100, 150)
-#        if count == 2:
-#            draw_box(canvas, best_x, 100, 100)
-#        if count == 3:
-#            draw_box(canvas, worst_x, 250, 50)
 
         # Increment time
         count = count + 1
