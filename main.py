@@ -6,44 +6,47 @@ import tkinter as tk
 from tkinter import ttk
 
 class proccessClass:
-    def __init__(self, p_pID, p_size, p_time):
-        self.pID  = p_pID
+    def __init__(self, p_PID, p_size, p_time):
+        self.PID  = p_PID
         self.size = p_size
-        self.time = p_time
+        self.TTL  = p_time
+        self.alloc= -1
+
+def runProccess(blockSize, plist):
+    for obj in plist:
+        if obj.alloc > -1:
+            obj.TTL -= 1
+            if obj.TTL == 0:
+                blockSize[obj.alloc] += obj.size
+                obj.alloc = -1
 
 # blocks as per First fit algorithm
 # This function was created by geeksforgeeks
 #       https://www.geeksforgeeks.org/program-first-fit-algorithm-memory-management
-def firstFit(blockSize, m, processSize, n):
-
-    # Stores block id of the
-    # block allocated to a process
-    allocation = [-1] * n
+def firstFit(blockSize, m, proc):
 
     # Initially no block is assigned to any process
 
     # pick each process and find suitable blocks
     # according to its size ad assign to it
-    for i in range(n):
-        for j in range(m):
-            if blockSize[j] >= processSize[i]:
+    for j in range(m):
+        if blockSize[j] >= proc.size:
 
-                # allocate block j to p[i] process
-                allocation[i] = j
+            # allocate block j to p[i] process
+            proc.alloc = j
 
-                # Reduce available memory in this block.
-                blockSize[j] -= processSize[i]
+            # Reduce available memory in this block.
+            blockSize[j] -= proc.size
 
-                break
+            break
 
     print(" Process No.\tProcess Size\tBlock no.")
-    for i in range(n):
-        print(" ", i + 1, "\t\t", processSize[i],
-                          "\t\t", end = " ")
-        if allocation[i] != -1:
-            print(allocation[i] + 1)
-        else:
-            print("Not Allocated")
+    print(" ", proc.PID, "\t\t", proc.size,
+                      "\t\t", end = " ")
+    if proc.alloc != -1:
+        print(proc.alloc + 1)
+    else:
+        print("Not Allocated")
 
 def draw_box(canvas, proc, x_offset, y):
     size = proc.size
@@ -127,7 +130,7 @@ for i in range(20):
 print("Initially create list")
 print("---------------------")
 for obj in plist:
-    print(obj.pID, obj.size, obj.time)
+    print(obj.PID, obj.size, obj.TTL)
 
 
 count = 0
@@ -147,8 +150,10 @@ while 1:
         ########################################
         # Do back end stuff here
 
-#        firstFit(blockSize, len(blockSize), plist[0].size, 1)
-
+        runProccess(blockSize, plist);
+        print(blockSize)
+        firstFit(blockSize, len(blockSize), plist[count])
+        print(blockSize)
 
         ########################################
 
@@ -162,12 +167,12 @@ while 1:
 #        for i in first_plist:
 #            draw_box(canvas, first_x, y, i.size)
 
-        if count == 1:
-            draw_box(canvas, first_x, 100, 150)
-        if count == 2:
-            draw_box(canvas, best_x, 100, 100)
-        if count == 3:
-            draw_box(canvas, worst_x, 250, 50)
+#        if count == 1:
+#            draw_box(canvas, first_x, 100, 150)
+#        if count == 2:
+#            draw_box(canvas, best_x, 100, 100)
+#        if count == 3:
+#            draw_box(canvas, worst_x, 250, 50)
 
         # Increment time
         count = count + 1
