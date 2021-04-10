@@ -45,7 +45,9 @@ def firstFit(blockSize, m, processSize, n):
         else:
             print("Not Allocated")
 
-def draw_box(canvas, x_offset, y, size):
+def draw_box(canvas, proc, x_offset, y):
+    size = proc.size
+    id = proc.pid
     y_offset = 100
     bar_width = 100
     box = canvas.create_rectangle(
@@ -55,6 +57,10 @@ def draw_box(canvas, x_offset, y, size):
                 y + y_offset + size,
                 fill="black"
             )
+    label = tk.Label(root,
+                text= "Proc " + id + "\nSize " + size
+            )
+    label.place(x = x_offset, y = y + y_offset)
 
 def start_CB(*proccess):
     global start_flag
@@ -146,9 +152,6 @@ while 1:
 
         ########################################
 
-        # vars from Richard
-        mem_size = 100
-
         # Bar location values
         first_x  = 0
         best_x   = 200
@@ -156,6 +159,9 @@ while 1:
         y_offset = 100
 
         # Display current memory allocation
+#        for i in first_plist:
+#            draw_box(canvas, first_x, y, i.size)
+
         if count == 1:
             draw_box(canvas, first_x, 100, 150)
         if count == 2:
@@ -166,6 +172,4 @@ while 1:
         # Increment time
         count = count + 1
         time.sleep(1)
-
-
 
