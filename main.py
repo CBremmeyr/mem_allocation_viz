@@ -45,6 +45,17 @@ def firstFit(blockSize, m, processSize, n):
         else:
             print("Not Allocated")
 
+def draw_box(canvas, x_offset, y, size):
+    y_offset = 100
+    bar_width = 100
+    box = canvas.create_rectangle(
+                x_offset,
+                y + y_offset,
+                x_offset + bar_width,
+                y + y_offset + size,
+                fill="black"
+            )
+
 def start_CB(*proccess):
     global start_flag
     start_flag = 1
@@ -56,9 +67,14 @@ def start_CB(*proccess):
 
 def exit_CB():
     root.destroy()
+    global quit_flag
+    quit_flag = 1
 
 global start_flag
 start_flag = 0
+
+global quit_flag
+quit_flag = 0
 
 # Make window for GUI
 root = tk.Tk()
@@ -73,9 +89,6 @@ canvas.place(x=200, y=0)
 first_bar_bg = canvas.create_rectangle(  0, 100, 100, 600, fill='red')
 best_bar_bg  = canvas.create_rectangle(200, 100, 300, 600, fill='red')
 worst_bar_bg = canvas.create_rectangle(400, 100, 500, 600, fill='red')
-
-# DEBUG: test drawing over other parts of the canvas
-test_box = canvas.create_rectangle(0, 100, 200, 50, fill='black')
 
 first_label = tk.Label(root, text="First\n  Next: ")
 best_label  = tk.Label(root, text="Best\n  Next: ")
@@ -98,23 +111,13 @@ startBtn.place(x=btnLeft, y=btnTop)
 stopBtn = tk.Button(root, text="Exit", command=exit_CB)
 stopBtn.place(x=btnLeft, y=btnTop+btnSpace)
 
-# Read in process sequence from file
-file = open("process_seq.txt", 'r')
-#print(file.readline())
-str_seq = file.readline().split()
-#print(str_seq)
-proc_seq = [0] * len(str_seq)
-for i in range(len(str_seq)):
-    proc_seq[i] = int(str_seq[i])
-print(proc_seq)
-
 #create memory blocks
-blockSize = [5,10,15,20]
+blockSize = [25,25,25,25,50,50,100,200]
 
 #create the process list
 plist = []
 for i in range(20):
-    plist.append(proccessClass(i+1,np.random.randint(1,1001), np.random.randint(1,10)))
+    plist.append(proccessClass(i+1,np.random.randint(1,201), np.random.randint(1,11)))
 print("Initially create list")
 print("---------------------")
 for obj in plist:
@@ -123,6 +126,10 @@ for obj in plist:
 
 count = 0
 while 1:
+
+    if quit_flag == 1:
+        quit(0)
+
     try:
         time_label.config(text="Time: " + str(count))
         root.update()
@@ -134,18 +141,31 @@ while 1:
         ########################################
         # Do back end stuff here
 
-        firstFit(blockSize, len(blockSize), plist[0].size, 1)
+#        firstFit(blockSize, len(blockSize), plist[0].size, 1)
 
 
         ########################################
 
-        # Remove finished processes
+        # vars from Richard
+        mem_size = 100
 
-        # Add new process
+        # Bar location values
+        first_x  = 0
+        best_x   = 200
+        worst_x  = 400
+        y_offset = 100
 
-        # Update next process size for each catagory
+        # Display current memory allocation
+        if count == 1:
+            draw_box(canvas, first_x, 100, 150)
+        if count == 2:
+            draw_box(canvas, best_x, 100, 100)
+        if count == 3:
+            draw_box(canvas, worst_x, 250, 50)
 
         # Increment time
         count = count + 1
         time.sleep(1)
+
+
 
