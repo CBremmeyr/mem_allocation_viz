@@ -92,6 +92,16 @@ startBtn.place(x=btnLeft, y=btnTop)
 stopBtn = tk.Button(root, text="Exit", command=exit_CB)
 stopBtn.place(x=btnLeft, y=btnTop+btnSpace)
 
+# Read in process sequence from file
+file = open("process_seq.txt", 'r')
+#print(file.readline())
+str_seq = file.readline().split()
+#print(str_seq)
+proc_seq = [0] * len(str_seq)
+for i in range(len(str_seq)):
+    proc_seq[i] = int(str_seq[i])
+print(proc_seq)
+
 count = 0
 while 1:
     try:
@@ -111,6 +121,13 @@ while 1:
 
         ########################################
 
+        # Remove finished processes
+
+        # Add new process
+
+        # Update next process size for each catagory
+
+        # Increment time
         count = count + 1
         time.sleep(1)
 
