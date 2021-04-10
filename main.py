@@ -5,7 +5,6 @@ import numpy as np
 import tkinter as tk
 from tkinter import ttk
 
-
 # Function to allocate memory to
 # blocks as per First fit algorithm
 # This function was created by geeksforgeeks
@@ -42,25 +41,35 @@ def firstFit(blockSize, m, processSize, n):
             print("Not Allocated")
 
 def start_CB(*proccess):
-    processSize = np.random.randint(1,10001, 20)
-    blockSize =  np.random.radnint(1,10001, 20)
+    global start_flag
+    start_flag = 1
 
-    firstFit(blockSize, len(blockSize), processSize, len(processSize))
+#    processSize = np.random.randint(1,10001, 20)
+#    blockSize =  np.random.radnint(1,10001, 20)
+
+#    firstFit(blockSize, len(blockSize), processSize, len(processSize))
 
 def exit_CB():
     root.destroy()
 
+global start_flag
+start_flag = 0
+
+# Make window for GUI
 root = tk.Tk()
 root.geometry("900x800")
 root.title("Dynamic Memory Allocation");
 
+# Make canvas to draw blocks on
 canvas = tk.Canvas(root, width=500, height=500)
 canvas.pack()
 
+# Add blocks to canvas
 first_bar_bg = canvas.create_rectangle(  0, 0, 100, 600, fill='red')
 best_bar_bg  = canvas.create_rectangle(200, 0, 300, 600, fill='red')
 worst_bar_bg = canvas.create_rectangle(400, 0, 500, 600, fill='red')
 
+# DEBUG: test drawing over other parts of the canvas
 test_box = canvas.create_rectangle(0, 0, 100, 50, fill='black')
 
 first_label = tk.Label(root, text="First\nNext: ")
@@ -85,16 +94,23 @@ stopBtn.place(x=btnLeft, y=btnTop+btnSpace)
 
 count = 0
 while 1:
-
     try:
         time_label.config(text="Time: " + str(count))
         root.update()
     except:
         quit(0)
 
-    count = count + 1
-    time.sleep(1)
+    if start_flag == 1:
+
+        ########################################
+        # Do back end stuff here
 
 
-#root.mainloop()
+
+
+
+        ########################################
+
+        count = count + 1
+        time.sleep(1)
 
