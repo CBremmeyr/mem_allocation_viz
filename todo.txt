@@ -1,6 +1,3 @@
-- function to update memBlocks after alloc/free
-    - make blockSize an array of ()
-- free mem after process finishes
-- run sim till all procs are done
-- make proc list static
-    - either hard-code or seed w/ const
+- make proc sequence static, not random
+- add labels to canvas blocks
+- fix time label overlap at bottom of middle mem bars
