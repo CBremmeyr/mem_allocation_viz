@@ -1,0 +1,147 @@
+Initially create list
+---------------------
+1 100 4
+2 87 3
+3 145 3
+
+Best Fit Block List
+Before: (allocFlag, size)
+[False, 500]
+Best Fit P List
+Before: -1
+-1
+-1
+ Process No.	Process Size	Block no.
+  1 		 100 		 1
+After : (allocFlag, size)
+[True, 100]
+[False, 400]
+Best Fit P List
+After: 0
+-1
+-1
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 100]
+[False, 400]
+Best Fit P List
+Before: 0
+-1
+-1
+ Process No.	Process Size	Block no.
+  2 		 87 		 2
+After : (allocFlag, size)
+[True, 100]
+[True, 87]
+[False, 313]
+Best Fit P List
+After: 0
+1
+-1
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 100]
+[True, 87]
+[False, 313]
+Best Fit P List
+Before: 0
+1
+-1
+ Process No.	Process Size	Block no.
+  3 		 145 		 3
+After : (allocFlag, size)
+[True, 100]
+[True, 87]
+[True, 145]
+[False, 168]
+Best Fit P List
+After: 0
+1
+2
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 100]
+[True, 87]
+[True, 145]
+[False, 168]
+Best Fit P List
+Before: 0
+1
+2
+freeMemBlocks()
+index: 0
+before:
+(allocFlag, size)
+[True, 100]
+[True, 87]
+[True, 145]
+[False, 168]
+after:
+(allocFlag, size)
+[False, 100]
+[True, 87]
+[True, 145]
+[False, 168]
+freeMemBlocks()
+index: 1
+before:
+(allocFlag, size)
+[False, 100]
+[True, 87]
+[True, 145]
+[False, 168]
+Merging w/ left
+after:
+(allocFlag, size)
+[False, 187]
+[True, 145]
+[False, 168]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[False, 187]
+[True, 145]
+[False, 168]
+Best Fit P List
+Before: -1
+-1
+1
+freeMemBlocks()
+index: 1
+before:
+(allocFlag, size)
+[False, 187]
+[True, 145]
+[False, 168]
+Merging w/ right
+Merging w/ left
+after:
+(allocFlag, size)
+[False, 500]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[False, 500]
+Best Fit P List
+Before: -1
+-1
+-1
+
+Best Fit Block List
+Before: (allocFlag, size)
+[False, 500]
+Best Fit P List
+Before: -1
+-1
+-1
+
+Best Fit Block List
+Before: (allocFlag, size)
+[False, 500]
+Best Fit P List
+Before: -1
+-1
+-1

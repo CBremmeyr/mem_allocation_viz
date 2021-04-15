@@ -243,7 +243,7 @@ worst_label.place(x=bar3_x + canvasOffset + 5, y=barHeight + 10)
 
 
 # Add remaining Elements to root
-time_label.place( x=400, y=600)
+time_label.place( x=400, y=700)
 #time_label.place( relx=0.50, rely=0.90)
 
 btnTop   = 400

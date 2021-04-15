@@ -1,3 +1,2 @@
 - make proc sequence static, not random
 - add labels to canvas blocks
-- fix time label overlap at bottom of middle mem bars
