@@ -7,6 +7,12 @@ import numpy as np
 import tkinter as tk
 from tkinter import ttk
 
+class guiBlock:
+    def __init__(self, x, y, offset, size):
+        self.x     = x
+        self.y     = y
+        self.size  = size;
+
 class proccessClass:
     def __init__(self, p_PID, p_size, p_time):
         self.PID  = p_PID
@@ -74,6 +80,7 @@ def bestFit(blockSize, m, proc):
         return -1
 
 def worstFit(blockSize, m, proc):
+      
           
     # Find the best fit block for 
     # current process 
@@ -100,25 +107,25 @@ def worstFit(blockSize, m, proc):
     else:
         return -1
 
-#def draw_box(canvas, proc, x_offset, y):
-#    size = proc.size
-#    id = proc.PID
-#    y_offset = 100
-#    bar_width = 100
-#    box = canvas.create_rectangle(
-#                x_offset,
-#                y + y_offset,
-#                x_offset + bar_width,
-#                y + y_offset + size,
-#                fill="white",
-#                width=5
-#            )
-#    label = tk.Label(root,
-#                text= "Proc " + str(id) + "\nSize " + str(size),
-#                font=("TkDefaultFont","5")
-#            )
-#    label.place(x = x_offset+200, y = y + y_offset)
-#    return (box, label)
+def draw_box(canvas, proc, x_offset, y):
+    size = proc.size
+    id = proc.PID
+    y_offset = 100
+    bar_width = 100
+    box = canvas.create_rectangle(
+                x_offset,
+                y + y_offset,
+                x_offset + bar_width,
+                y + y_offset + size,
+                fill="white",
+                width=5
+            )
+    label = tk.Label(root,
+                text= "Proc " + str(id) + "\nSize " + str(size),
+                font=("TkDefaultFont","5")
+            )
+    label.place(x = x_offset+200, y = y + y_offset)
+    return (box, label)
 
 def start_CB(*proccess):
     global start_flag
@@ -151,17 +158,16 @@ canvas = tk.Canvas(root, width=500, height=700, bd=0)
 canvas.place(x=canvasOffset, y=0)
 
 # Add blocks to canvas
-barSpace  = 200
-barTop    = 100
-barWidth  = 75
-barHeight = 500 + barTop
+barSpace = 200
+barWidth = 75
+barHeight = 500
 bar1_x = 0
 bar2_x = bar1_x + barSpace
 bar3_x = bar2_x + barSpace
 
-first_bar_bg = canvas.create_rectangle(bar1_x, barTop, bar1_x + barWidth, barHeight, fill='red')
-best_bar_bg  = canvas.create_rectangle(bar2_x, barTop, bar2_x + barWidth, barHeight, fill='red')
-worst_bar_bg = canvas.create_rectangle(bar3_x, barTop, bar3_x + barWidth, barHeight, fill='red')
+first_bar_bg = canvas.create_rectangle(bar1_x, 100, bar1_x + barWidth, barHeight, fill='red')
+best_bar_bg  = canvas.create_rectangle(bar2_x, 100, bar2_x + barWidth, barHeight, fill='red')
+worst_bar_bg = canvas.create_rectangle(bar3_x, 100, bar3_x + barWidth, barHeight, fill='red')
 
 first_label = tk.Label(root, text="First\n  Next: ")
 best_label  = tk.Label(root, text="Best\n  Next: ")
@@ -171,14 +177,11 @@ time_label  = tk.Label(root, text="Time: ")
 first_label.place(x=bar1_x + canvasOffset + 5, y=barHeight + 10)
 best_label.place( x=bar2_x + canvasOffset + 5, y=barHeight + 10)
 worst_label.place(x=bar3_x + canvasOffset + 5, y=barHeight + 10)
-
-
-# Add remaining Elements to root
 time_label.place( x=400, y=600)
 #time_label.place( relx=0.50, rely=0.90)
 
-btnTop   = 400
-btnLeft  = 20
+btnTop = 400
+btnLeft = 20
 btnSpace = 50
 
 startBtn = tk.Button(root, text="Start", command=start_CB)
@@ -187,36 +190,8 @@ startBtn.place(x=btnLeft, y=btnTop)
 stopBtn = tk.Button(root, text="Exit", command=exit_CB)
 stopBtn.place(x=btnLeft, y=btnTop+btnSpace)
 
-#------------------    GUI FUNCTIONS ----------------------#
-def drawBox(canvas, barType, memBlocks, proc):
-
-    if(barType == 1):
-        pBox_x = bar1_x 
-    if(barType == 2):
-        pBox_x = bar2_x
-    if(barType == 3):
-        pBox_x = bar3_x
-
-    pBox_y = 0
-    for i in range(proc.alloc):
-        pBox_y += memBlocks[i]
-
-    pBox_size = proc.size 
-    
-    #print("Y & size:", pBox_y, pBox_size)
-    offSet = barTop + pBox_y
-    canvas.create_rectangle(pBox_x, offSet, pBox_x + barWidth, pBox_size + offSet, fill = 'blue')
-
 #create memory blocks
 blockSize = [25,50,25,100,25,50,25,200]
-
-offSet = barTop
-for i in range(len(blockSize)):
-    canvas.create_rectangle(bar1_x, offSet, bar1_x + barWidth, 1+offSet, fill = 'black')
-    canvas.create_rectangle(bar2_x, offSet, bar2_x + barWidth, 1+offSet, fill = 'black')
-    canvas.create_rectangle(bar3_x, offSet, bar3_x + barWidth, 1+offSet, fill = 'black')
-    offSet += blockSize[i]
-
 
 #create the process list
 plist = []
@@ -280,7 +255,6 @@ while 1:
             print(blocks_ff)
         
         if ret == 0:
-            drawBox(canvas, 1, blockSize, plist_ff[currProc_ff])
             currProc_ff += 1
 
         #--------------------------Best Fit-----------------------------
@@ -304,7 +278,6 @@ while 1:
             print(blocks_bf)
 
         if ret == 0:
-            drawBox(canvas, 2, blockSize, plist_bf[currProc_bf])
             currProc_bf += 1
 
         #--------------------------Worst Fit-----------------------------
@@ -328,33 +301,31 @@ while 1:
             print(blocks_wf)
 
         if ret == 0:
-            drawBox(canvas, 3, blockSize, plist_wf[currProc_wf])
             currProc_wf += 1
 
         ########################################
 
+        # Bar location values
+        first_x  = 0
+        best_x   = 200
+        worst_x  = 400
+        y_offset = 100
 
-#        # Bar location values
-#        first_x  = 0
-#        best_x   = 200
-#       worst_x  = 400
-#       y_offset = 100
-#
-#       # Delete drawn stuff
-#       for i in draw_list:
-#           canvas.delete(i[0])
-#           i[1].destroy()
-#
-#       # Display current memory allocation
-#       for i in plist:
-#           offset = 0
-#           for j in range(i.alloc-1):
-#               offset += blockSize[j]
-#           draw_list.append(draw_box(canvas, i, first_x, offset))
+        # Delete drawn stuff
+        for i in draw_list:
+            canvas.delete(i[0])
+            i[1].destroy()
+
+        # Display current memory allocation
+        for i in plist:
+            offset = 0
+            for j in range(i.alloc-1):
+                offset += blockSize[j]
+            draw_list.append(draw_box(canvas, i, first_x, offset))
 
 
         # Increment time
         count = count + 1
         root.update()
-        time.sleep(1)
+        time.sleep(5)
 
