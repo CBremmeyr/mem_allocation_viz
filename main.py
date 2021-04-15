@@ -46,13 +46,13 @@ def freeMemBlocks(canvas, memBlocks, proc, plist):
     canvas.delete(memBlocks[proc.alloc].box)
 
     #DEBUG
-    print("freeMemBlocks()")
-    print("index: " + str(proc.alloc))
-    print("before:")
-    print("(allocFlag, size)")
-    for i in range(len(memBlocks)):
-        print("[", end="")
-        print(str(memBlocks[i].allocFlag) + ", " + str(memBlocks[i].size) + "]")
+#    print("freeMemBlocks()")
+#    print("index: " + str(proc.alloc))
+#    print("before:")
+#    print("(allocFlag, size)")
+#    for i in range(len(memBlocks)):
+#        print("[", end="")
+#        print(str(memBlocks[i].allocFlag) + ", " + str(memBlocks[i].size) + "]")
 
     blockIndex = proc.alloc                 # Index of block being freed
 
@@ -70,7 +70,7 @@ def freeMemBlocks(canvas, memBlocks, proc, plist):
     if mergeRight:
 
         #DEBUG
-        print("Merging w/ right")
+#        print("Merging w/ right")
 
         memBlocks[blockIndex].size += memBlocks[rightIndex].size
         memBlocks.pop(rightIndex)
@@ -82,7 +82,7 @@ def freeMemBlocks(canvas, memBlocks, proc, plist):
     if mergeLeft:
 
         #DEBUG
-        print("Merging w/ left")
+#        print("Merging w/ left")
 
         memBlocks[leftIndex].size += memBlocks[blockIndex].size
         memBlocks.pop(blockIndex)
@@ -93,11 +93,11 @@ def freeMemBlocks(canvas, memBlocks, proc, plist):
 
 
     #DEBUG
-    print("after:")
-    print("(allocFlag, size)")
-    for i in range(len(memBlocks)):
-        print("[", end="")
-        print(str(memBlocks[i].allocFlag) + ", " + str(memBlocks[i].size) + "]")
+#    print("after:")
+#    print("(allocFlag, size)")
+#    for i in range(len(memBlocks)):
+#        print("[", end="")
+#        print(str(memBlocks[i].allocFlag) + ", " + str(memBlocks[i].size) + "]")
 
 # Removes a TTL from a running proccess and reallocs the space if process is complete
 def runProccess(canvas, memBlocks, plist):
@@ -338,47 +338,47 @@ while 1:
         #--------------------------First Fit-----------------------------
 
         #DEBUG
-#        print_ff = 1
-#
-#        runProccess(canvas, blocks_ff, plist_ff)
-#
-#        #DEBUG
-#        if print_ff == 1:
-#            print("\nFirst Fit Block List")
-#            print("Before: ", end = "")
-##            print(blocks_ff);
-#            print("(allocFlag, size)")
-#            for i in range(len(blocks_ff)):
-#                print("[", end="")
-#                print(str(blocks_ff[i].allocFlag) + ", " + str(blocks_ff[i].size) + "]")
-#
-#
-#        if currProc_ff < len(plist):
-#            ret = firstFit(blocks_ff, len(blocks_ff), plist_ff[currProc_ff], plist_ff)
-#
-#            #DEBUG
-#            if print_ff == 1:
-#                print(" Process No.\tProcess Size\tBlock no.")
-#                print(" ",plist_ff[currProc_ff].PID, "\t\t", plist_ff[currProc_ff].size, "\t\t", end = " ")
-#                if plist_ff[currProc_ff].alloc != -1:
-#                    print(plist_ff[currProc_ff].alloc + 1)
-#                else:
-#                    print("Not Allocated")
-#                print("After : ", end = "")
-##                print(blocks_ff)
-#                print("(allocFlag, size)")
-#                for i in range(len(blocks_ff)):
-#                    print("[", end="")
-#                    print(str(blocks_ff[i].allocFlag) + ", " + str(blocks_ff[i].size) + "]")
-#
-#
-#            if ret == 0:
-##                drawBox(canvas, 1, blocks_ff, plist_ff[currProc_ff])
-#                blocks_ff[plist_ff[currProc_ff].alloc].box = drawBox(canvas, 1, blocks_ff, plist_ff[currProc_ff])
-#                currProc_ff += 1
+        print_ff = 1
+
+        runProccess(canvas, blocks_ff, plist_ff)
+
+        #DEBUG
+        if print_ff == 1:
+            print("\nFirst Fit Block List")
+            print("Before: ", end = "")
+#            print(blocks_ff);
+            print("(allocFlag, size)")
+            for i in range(len(blocks_ff)):
+                print("[", end="")
+                print(str(blocks_ff[i].allocFlag) + ", " + str(blocks_ff[i].size) + "]")
+
+
+        if currProc_ff < len(plist):
+            ret = firstFit(blocks_ff, len(blocks_ff), plist_ff[currProc_ff], plist_ff)
+
+            #DEBUG
+            if print_ff == 1:
+                print(" Process No.\tProcess Size\tBlock no.")
+                print(" ",plist_ff[currProc_ff].PID, "\t\t", plist_ff[currProc_ff].size, "\t\t", end = " ")
+                if plist_ff[currProc_ff].alloc != -1:
+                    print(plist_ff[currProc_ff].alloc + 1)
+                else:
+                    print("Not Allocated")
+                print("After : ", end = "")
+#                print(blocks_ff)
+                print("(allocFlag, size)")
+                for i in range(len(blocks_ff)):
+                    print("[", end="")
+                    print(str(blocks_ff[i].allocFlag) + ", " + str(blocks_ff[i].size) + "]")
+
+
+            if ret == 0:
+#                drawBox(canvas, 1, blocks_ff, plist_ff[currProc_ff])
+                blocks_ff[plist_ff[currProc_ff].alloc].box = drawBox(canvas, 1, blocks_ff, plist_ff[currProc_ff])
+                currProc_ff += 1
 
         #--------------------------Best Fit-----------------------------
-        print_bf = 1;
+        print_bf = 1
 
         runProccess(canvas, blocks_bf, plist_bf)
         if print_bf == 1:
@@ -418,8 +418,14 @@ while 1:
 
             if ret == 0:
 #                drawBox(canvas, 2, blocks_bf, plist_bf[currProc_bf])
-                x = plist_bf[currProc_bf].alloc
-                blocks_bf[x].box = drawBox(canvas, 2, blocks_bf, plist_bf[currProc_bf])
+
+                #DEBUG
+#                x = plist_bf[currProc_bf].alloc
+#                print(plist_bf[currProc_bf])
+#                print("x: " + str(x))
+#                print(blocks_bf[x].size)
+#                blocks_bf[x].box = drawBox(canvas, 2, blocks_bf, plist_bf[currProc_bf])
+                blocks_bf[plist_bf[currProc_bf].alloc].box = drawBox(canvas, 2, blocks_bf, plist_bf[currProc_bf])
                 currProc_bf += 1
 
         #--------------------------Worst Fit-----------------------------

@@ -1,147 +1,470 @@
 Initially create list
 ---------------------
-1 100 4
-2 87 3
-3 145 3
+1 37 2
+2 32 2
+3 14 1
 
-Best Fit Block List
+First Fit Block List
 Before: (allocFlag, size)
 [False, 500]
-Best Fit P List
-Before: -1
--1
--1
  Process No.	Process Size	Block no.
-  1 		 100 		 1
+  1 		 37 		 1
 After : (allocFlag, size)
-[True, 100]
-[False, 400]
-Best Fit P List
-After: 0
--1
--1
+[True, 37]
+[False, 463]
 
 Best Fit Block List
 Before: (allocFlag, size)
-[True, 100]
-[False, 400]
+[True, 37]
 Best Fit P List
 Before: 0
 -1
 -1
  Process No.	Process Size	Block no.
-  2 		 87 		 2
+  1 		 37 		 1
 After : (allocFlag, size)
-[True, 100]
-[True, 87]
-[False, 313]
+[True, 37]
 Best Fit P List
 After: 0
-1
 -1
+-1
+
+First Fit Block List
+Before: (allocFlag, size)
+[False, 500]
+ Process No.	Process Size	Block no.
+  2 		 32 		 1
+After : (allocFlag, size)
+[True, 32]
+[False, 468]
 
 Best Fit Block List
 Before: (allocFlag, size)
-[True, 100]
-[True, 87]
-[False, 313]
+[True, 32]
 Best Fit P List
-Before: 0
-1
+Before: -1
+0
 -1
  Process No.	Process Size	Block no.
-  3 		 145 		 3
+  2 		 32 		 1
 After : (allocFlag, size)
-[True, 100]
-[True, 87]
-[True, 145]
-[False, 168]
+[True, 32]
 Best Fit P List
-After: 0
-1
-2
-
-Best Fit Block List
-Before: (allocFlag, size)
-[True, 100]
-[True, 87]
-[True, 145]
-[False, 168]
-Best Fit P List
-Before: 0
-1
-2
-freeMemBlocks()
-index: 0
-before:
-(allocFlag, size)
-[True, 100]
-[True, 87]
-[True, 145]
-[False, 168]
-after:
-(allocFlag, size)
-[False, 100]
-[True, 87]
-[True, 145]
-[False, 168]
-freeMemBlocks()
-index: 1
-before:
-(allocFlag, size)
-[False, 100]
-[True, 87]
-[True, 145]
-[False, 168]
-Merging w/ left
-after:
-(allocFlag, size)
-[False, 187]
-[True, 145]
-[False, 168]
-
-Best Fit Block List
-Before: (allocFlag, size)
-[False, 187]
-[True, 145]
-[False, 168]
-Best Fit P List
-Before: -1
+After: -1
+0
 -1
-1
-freeMemBlocks()
-index: 1
-before:
-(allocFlag, size)
-[False, 187]
-[True, 145]
-[False, 168]
-Merging w/ right
-Merging w/ left
-after:
-(allocFlag, size)
+
+First Fit Block List
+Before: (allocFlag, size)
 [False, 500]
+ Process No.	Process Size	Block no.
+  3 		 14 		 1
+After : (allocFlag, size)
+[True, 14]
+[False, 486]
 
 Best Fit Block List
 Before: (allocFlag, size)
-[False, 500]
+[False, 14]
 Best Fit P List
 Before: -1
 -1
 -1
+ Process No.	Process Size	Block no.
+  3 		 14 		 1
+After : (allocFlag, size)
+[True, 14]
+Best Fit P List
+After: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
 
 Best Fit Block List
 Before: (allocFlag, size)
-[False, 500]
+[True, 14]
 Best Fit P List
 Before: -1
 -1
--1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
 
 Best Fit Block List
 Before: (allocFlag, size)
-[False, 500]
+[True, 14]
 Best Fit P List
 Before: -1
 -1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
 -1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
+
+First Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+[False, 486]
+
+Best Fit Block List
+Before: (allocFlag, size)
+[True, 14]
+Best Fit P List
+Before: -1
+-1
+0
