@@ -1,0 +1,6 @@
+- function to update memBlocks after alloc/free
+    - make blockSize an array of ()
+- free mem after process finishes
+- run sim till all procs are done
+- make proc list static
+    - either hard-code or seed w/ const

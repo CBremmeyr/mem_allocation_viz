@@ -14,30 +14,62 @@ class proccessClass:
         self.TTL  = p_time
         self.alloc= -1
 
+# Update memBlocks array after a process is alloced
+def allocMemBlocks(memBlocks, blockIndex, proc):
+
+    # Split alloced block into alloced and free segments
+    allocSize = proc.size
+    freeSize  = memBlocks[blockIndex].size - proc.size
+
+    memBlocks[blockIndex][0] = True
+    memBlocks[blockIndex][1] = allocSize
+
+    if freeSize != 0:
+        memBlocks.instert(blockIndex+1, (false, freeSize))
+
+# Update memBlocks array after a process is freed
+def freeMemBlocks(memBlocks, blockIndex, proc):
+
+    # Determine if adjacent blocks should be merged
+    leftIndex = blockIndex - 1
+    mergeLeft = not memBlocks[leftIndex][0] if leftIndex > 0 else False
+
+    rightIndex = blockIndex + 1
+    mergeRight = not memBlocks[rightIndex][0] if rightIndex < len(memBlocks) else False
+
+    # Merge adjacent blocks
+    if mergeRight:
+        memBlocks[blockIndex][1] += memBlocks[rightIndex][1]
+        memBlocks.pop(rightIndex)
+
+    if mergeLeft:
+        memBlocks[leftIndex][1] += memBlocks[blockIndex][1]
+        memBlocks.pop(blockIndex)
+
 #Removes a TTL from a running proccess and reallocs the space if process is complete
-def runProccess(blockSize, plist):
+def runProccess(memBlocks, plist):
     for obj in plist:
         if obj.alloc > -1:
             obj.TTL -= 1
             if obj.TTL == 0:
-                blockSize[obj.alloc] += obj.size
+                memBlocks[obj.alloc] += obj.size
                 obj.alloc = -1
 
 # blocks as per First fit algorithm
-def firstFit(blockSize, m, proc):
+def firstFit(memBlocks, m, proc):
 
     # Initially no block is assigned to any process
 
     # pick each process and find suitable blocks
     # according to its size ad assign to it
     for j in range(m):
-        if blockSize[j] >= proc.size:
+        if memBlocks[j] >= proc.size:
 
             # allocate block j to p[i] process
             proc.alloc = j
 
             # Reduce available memory in this block.
-            blockSize[j] -= proc.size
+            memBlocks[j] -= proc.size
 
             break
 
@@ -46,56 +78,65 @@ def firstFit(blockSize, m, proc):
     else:
         return -1
 
-def bestFit(blockSize, m, proc):
-      
+
+#######################
+
+    memBlocks[i] = (allocFlag, size)
+
+    updateBlockSize(memBlocks, allocedBlock)
+
+#######################
+
+def bestFit(memBlocks, m, proc):
+
     # Find the best fit block for
-    # current process 
+    # current process
     bestIdx = -1
     for j in range(m):
-        if blockSize[j] >= proc.size:
-            if bestIdx == -1: 
-                bestIdx = j 
-            elif blockSize[bestIdx] > blockSize[j]: 
+        if memBlocks[j] >= proc.size:
+            if bestIdx == -1:
                 bestIdx = j
-  
-    # If we could find a block for 
-    # current process 
+            elif memBlocks[bestIdx] > memBlocks[j]:
+                bestIdx = j
+
+    # If we could find a block for
+    # current process
     if bestIdx != -1:
-              
-        # allocate block j to p[i] process 
-        proc.alloc = bestIdx 
-  
-        # Reduce available memory in this block. 
-        blockSize[bestIdx] -= proc.size
-  
-    if proc.alloc != -1: 
+
+        # allocate block j to p[i] process
+        proc.alloc = bestIdx
+
+        # Reduce available memory in this block.
+        memBlocks[bestIdx] -= proc.size
+
+    if proc.alloc != -1:
         return 0
     else:
         return -1
 
-def worstFit(blockSize, m, proc):
-          
-    # Find the best fit block for 
-    # current process 
+def worstFit(memBlocks, m, proc):
+
+    # Find the best fit block for
+    # current process
     wstIdx = -1
     for j in range(m):
-        if blockSize[j] >= proc.size:
-            if wstIdx == -1: 
-                wstIdx = j 
-            elif blockSize[wstIdx] < blockSize[j]: 
+        if memBlocks[j] >= proc.size:
+            if wstIdx == -1:
                 wstIdx = j
-  
-    # If we could find a block for 
-    # current process 
+            elif memBlocks[wstIdx] < memBlocks[j]:
+                wstIdx = j
+
+    # If we could find a block for
+    # current process
     if wstIdx != -1:
-              
-        # allocate block j to p[i] process 
-        proc.alloc = wstIdx 
-  
-        # Reduce available memory in this block. 
-        blockSize[wstIdx] -= proc.size
-    
-    if proc.alloc != -1: 
+
+        # allocate block j to p[i] process
+        proc.alloc = wstIdx
+
+        # Reduce available memory in this block.
+        memBlocks[wstIdx] -= proc.size
+
+    if proc.alloc != -1:
         return 0
     else:
         return -1
@@ -125,9 +166,9 @@ def start_CB(*proccess):
     start_flag = 1
 
 #    processSize = np.random.randint(1,10001, 20)
-#    blockSize =  np.random.radnint(1,10001, 20)
+#    memBlocks =  np.random.radnint(1,10001, 20)
 
-#    firstFit(blockSize, len(blockSize), processSize, len(processSize))
+#    firstFit(memBlocks, len(memBlocks), processSize, len(processSize))
 
 def exit_CB():
     root.destroy()
@@ -191,7 +232,7 @@ stopBtn.place(x=btnLeft, y=btnTop+btnSpace)
 def drawBox(canvas, barType, memBlocks, proc):
 
     if(barType == 1):
-        pBox_x = bar1_x 
+        pBox_x = bar1_x
     if(barType == 2):
         pBox_x = bar2_x
     if(barType == 3):
@@ -201,21 +242,21 @@ def drawBox(canvas, barType, memBlocks, proc):
     for i in range(proc.alloc):
         pBox_y += memBlocks[i]
 
-    pBox_size = proc.size 
-    
+    pBox_size = proc.size
+
     #print("Y & size:", pBox_y, pBox_size)
     offSet = barTop + pBox_y
     canvas.create_rectangle(pBox_x, offSet, pBox_x + barWidth, pBox_size + offSet, fill = 'blue')
 
 #create memory blocks
-blockSize = [25,50,25,100,25,50,25,200]
+memBlocks = [25,50,25,100,25,50,25,200]
 
 offSet = barTop
-for i in range(len(blockSize)):
+for i in range(len(memBlocks)):
     canvas.create_rectangle(bar1_x, offSet, bar1_x + barWidth, 1+offSet, fill = 'black')
     canvas.create_rectangle(bar2_x, offSet, bar2_x + barWidth, 1+offSet, fill = 'black')
     canvas.create_rectangle(bar3_x, offSet, bar3_x + barWidth, 1+offSet, fill = 'black')
-    offSet += blockSize[i]
+    offSet += memBlocks[i]
 
 
 #create the process list
@@ -233,15 +274,15 @@ count = 0
 
 #initialize all three sims
 plist_ff = plist.copy()
-blocks_ff = blockSize.copy()
+blocks_ff = memBlocks.copy()
 currProc_ff = 0
 
 plist_bf = plist.copy()
-blocks_bf = blockSize.copy()
+blocks_bf = memBlocks.copy()
 currProc_bf = 0
 
 plist_wf = plist.copy()
-blocks_wf = blockSize.copy()
+blocks_wf = memBlocks.copy()
 currProc_wf = 0
 
 while 1:
@@ -267,7 +308,7 @@ while 1:
             print("\nFirst Fit Block List")
             print("Before: ", end = "")
             print(blocks_ff);
-        
+
         ret = firstFit(blocks_ff, len(blocks_ff), plist_ff[currProc_ff])
         if print_ff == 1:
             print(" Process No.\tProcess Size\tBlock no.")
@@ -278,9 +319,9 @@ while 1:
                 print("Not Allocated")
             print("After : ", end = "")
             print(blocks_ff)
-        
+
         if ret == 0:
-            drawBox(canvas, 1, blockSize, plist_ff[currProc_ff])
+            drawBox(canvas, 1, memBlocks, plist_ff[currProc_ff])
             currProc_ff += 1
 
         #--------------------------Best Fit-----------------------------
@@ -291,7 +332,7 @@ while 1:
             print("\nBest Fit Block List")
             print("Before: ", end = "")
             print(blocks_bf);
-        
+
         ret = bestFit(blocks_bf, len(blocks_bf), plist_bf[currProc_bf])
         if print_bf == 1:
             print(" Process No.\tProcess Size\tBlock no.")
@@ -304,18 +345,18 @@ while 1:
             print(blocks_bf)
 
         if ret == 0:
-            drawBox(canvas, 2, blockSize, plist_bf[currProc_bf])
+            drawBox(canvas, 2, memBlocks, plist_bf[currProc_bf])
             currProc_bf += 1
 
         #--------------------------Worst Fit-----------------------------
         print_wf = 0;
-        
+
         runProccess(blocks_wf, plist_wf)
         if print_wf == 1:
             print("\nWorst Fit Block List")
             print("Before: ", end = "")
             print(blocks_wf);
-        
+
         ret = worstFit(blocks_wf, len(blocks_wf), plist_bf[currProc_wf])
         if print_wf == 1:
             print(" Process No.\tProcess Size\tBlock no.")
@@ -328,7 +369,7 @@ while 1:
             print(blocks_wf)
 
         if ret == 0:
-            drawBox(canvas, 3, blockSize, plist_wf[currProc_wf])
+            drawBox(canvas, 3, memBlocks, plist_wf[currProc_wf])
             currProc_wf += 1
 
         ########################################
@@ -349,7 +390,7 @@ while 1:
 #       for i in plist:
 #           offset = 0
 #           for j in range(i.alloc-1):
-#               offset += blockSize[j]
+#               offset += memBlocks[j]
 #           draw_list.append(draw_box(canvas, i, first_x, offset))
 
 
