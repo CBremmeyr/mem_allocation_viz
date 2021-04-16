@@ -1,4 +1,3 @@
-- BUG: next label at bottom of each bar increments when it shouldn't
 - make proc sequence better
     - needs 20 to 30 lines
     - should result in very different simulations for each algo

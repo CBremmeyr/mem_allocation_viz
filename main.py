@@ -294,6 +294,16 @@ while 1:
 
         #--------------------------First Fit-----------------------------
         nextProc_ff = currProc_ff + 1
+
+        runProccess(canvas, blocks_ff, plist_ff)
+        if currProc_ff < len(plist_ff):
+            ret_ff = firstFit(blocks_ff, len(blocks_ff), plist_ff[currProc_ff], plist_ff)
+            if ret_ff == 0:
+                drawBox(canvas, 1, blocks_ff, plist_ff[currProc_ff])
+                currProc_ff += 1
+            else:
+                nextProc_ff -= 1
+
         if nextProc_ff < len(plist_ff):
             try:
                 first_label.config(text="First\n  Next: "+str(plist_ff[nextProc_ff].size))
@@ -305,16 +315,18 @@ while 1:
             except:
                 quit(0)
 
-        runProccess(canvas, blocks_ff, plist_ff)
-
-        if currProc_ff < len(plist_ff):
-            ret_ff = firstFit(blocks_ff, len(blocks_ff), plist_ff[currProc_ff], plist_ff)
-            if ret_ff == 0:
-                drawBox(canvas, 1, blocks_ff, plist_ff[currProc_ff])
-                currProc_ff += 1
-
         #--------------------------Best Fit-----------------------------
         nextProc_bf = currProc_bf + 1
+
+        runProccess(canvas, blocks_bf, plist_bf)
+        if currProc_bf < len(plist_bf):
+            ret_bf = bestFit(blocks_bf, len(blocks_bf), plist_bf[currProc_bf], plist_bf)
+            if ret_bf == 0:
+                drawBox(canvas, 2, blocks_bf, plist_bf[currProc_bf])
+                currProc_bf += 1
+            else:
+                nextProc_bf -= 1
+
         if nextProc_bf < len(plist_bf):
             try:
                 best_label.config(text="Best\n  Next: "+str(plist_bf[nextProc_bf].size))
@@ -326,16 +338,18 @@ while 1:
             except:
                 quit(0)
 
-        runProccess(canvas, blocks_bf, plist_bf)
-
-        if currProc_bf < len(plist_bf):
-            ret_bf = bestFit(blocks_bf, len(blocks_bf), plist_bf[currProc_bf], plist_bf)
-            if ret_bf == 0:
-                drawBox(canvas, 2, blocks_bf, plist_bf[currProc_bf])
-                currProc_bf += 1
-
         #--------------------------Worst Fit-----------------------------
         nextProc_wf = currProc_wf + 1
+
+        runProccess(canvas, blocks_wf, plist_wf)
+        if currProc_wf < len(plist_wf):
+            ret_wf = worstFit(blocks_wf, len(blocks_wf), plist_wf[currProc_wf], plist_wf)
+            if ret_wf == 0:
+                drawBox(canvas, 3, blocks_wf, plist_wf[currProc_wf])
+                currProc_wf += 1
+            else:
+                nextProc_wf -= 1
+
         if nextProc_wf < len(plist_wf):
             try:
                 worst_label.config(text="  Worst\n  Next: "+str(plist_wf[nextProc_wf].size))
@@ -346,13 +360,6 @@ while 1:
                 worst_label.config(text="  Worst\n  Next: ")
             except:
                 quit(0)
-
-        runProccess(canvas, blocks_wf, plist_wf)
-        if currProc_wf < len(plist_wf):
-            ret_wf = worstFit(blocks_wf, len(blocks_wf), plist_wf[currProc_wf], plist_wf)
-            if ret_wf == 0:
-                drawBox(canvas, 3, blocks_wf, plist_wf[currProc_wf])
-                currProc_wf += 1
 
         ########################################
 
