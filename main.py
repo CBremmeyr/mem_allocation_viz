@@ -3,7 +3,8 @@
 # Note: the algorothims were inspired by the geeksforgeeks.com python code
 
 import time
-import numpy as np
+import numpy as np  # TODO: remove after random num generation has been removed
+import csv
 import tkinter as tk
 from tkinter import ttk
 
@@ -102,14 +103,6 @@ def freeMemBlocks(canvas, f_memBlocks, proc, f_plist):
         for i in f_plist:
             if i.alloc > blockIndex:
                 i.alloc -= 1;
-
-
-    #DEBUG
-#    print("after:")
-#    print("(allocFlag, size)")
-#    for i in range(len(f_memBlocks)):
-#        print("[", end="")
-#        print(str(f_memBlocks[i].allocFlag) + ", " + str(f_memBlocks[i].size) + "]")
 
 # Removes a TTL from a running proccess and reallocs the space if process is complete
 def runProccess(canvas, r_memBlocks, r_plist):
@@ -250,7 +243,6 @@ worst_label.place(x=bar3_x + canvasOffset + 5, y=barHeight + 10)
 
 # Add remaining Elements to root
 time_label.place( x=400, y=700)
-#time_label.place( relx=0.50, rely=0.90)
 
 btnTop   = 400
 btnLeft  = 20
@@ -262,7 +254,7 @@ startBtn.place(x=btnLeft, y=btnTop)
 stopBtn = tk.Button(root, text="Exit", command=exit_CB)
 stopBtn.place(x=btnLeft, y=btnTop+btnSpace)
 
-#------------------    GUI FUNCTIONS ----------------------#
+#------------------ GUI FUNCTIONS ----------------------#
 def drawBox(canvas, barType, d_memBlocks, proc):
 
     if(barType == 1):
@@ -274,45 +266,46 @@ def drawBox(canvas, barType, d_memBlocks, proc):
 
     pBox_y = 0
 
-    #DEBUG
-#    print("drawBox()")
-#    print("d_memBlocks.len=" + str(len(d_memBlocks)))
-#    print("proc.alloc=" + str(proc.alloc))
-
     for i in range(proc.alloc):
         pBox_y += d_memBlocks[i].size
-
     pBox_size = proc.size
-
-    #print("Y & size:", pBox_y, pBox_size)
     offSet = barTop + pBox_y
     proc.box = canvas.create_rectangle(pBox_x, offSet, pBox_x + barWidth,
             pBox_size + offSet, fill = 'blue')
 
-#create memory blocks
-og_memBlocks = [memBlockClass(False, MEM_SIZE)]
+# Make background rectangles for memory spaces
+canvas.create_rectangle(bar1_x, barTop, bar1_x + barWidth, 1+barTop, fill = 'black')
+canvas.create_rectangle(bar2_x, barTop, bar2_x + barWidth, 1+barTop, fill = 'black')
+canvas.create_rectangle(bar3_x, barTop, bar3_x + barWidth, 1+barTop, fill = 'black')
 
-offSet = barTop
-for i in range(len(og_memBlocks)):
-    canvas.create_rectangle(bar1_x, offSet, bar1_x + barWidth,
-            1+offSet, fill = 'black')
-    canvas.create_rectangle(bar2_x, offSet, bar2_x + barWidth,
-            1+offSet, fill = 'black')
-    canvas.create_rectangle(bar3_x, offSet, bar3_x + barWidth,
-            1+offSet, fill = 'black')
-    offSet += og_memBlocks[i].size
-
-
-#create the process list
+# Load process sequence from csv file
 plist_ff = []
 plist_bf = []
 plist_wf = []
-for i in range(3):
-    randSize = np.random.randint(1,151)
-    randTime = np.random.randint(1,5)
-    plist_ff.append(proccessClass(i+1, randSize, randTime))
-    plist_bf.append(proccessClass(i+1, randSize, randTime))
-    plist_wf.append(proccessClass(i+1, randSize, randTime))
+csvFile = open("proc_seq.csv")
+csvReader = csv.reader(csvFile, )
+for row in csvReader:
+    if row[0][0] == '#':
+        continue
+
+    pid  = int(row[0])
+    size = int(row[1])
+    ttl  = int(row[2])
+
+    plist_ff.append(proccessClass(pid, size, ttl))
+    plist_bf.append(proccessClass(pid, size, ttl))
+    plist_wf.append(proccessClass(pid, size, ttl))
+
+# Create the process lists
+#plist_ff = []
+#plist_bf = []
+#plist_wf = []
+#for i in range(3):
+#    randSize = np.random.randint(1,151)
+#    randTime = np.random.randint(1,5)
+#    plist_ff.append(proccessClass(i+1, randSize, randTime))
+#    plist_bf.append(proccessClass(i+1, randSize, randTime))
+#    plist_wf.append(proccessClass(i+1, randSize, randTime))
 print("Initially create list")
 print("---------------------")
 for obj in plist_ff:

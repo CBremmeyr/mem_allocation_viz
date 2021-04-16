@@ -1,4 +1,5 @@
 - make proc sequence static, not random
+    - store in csv file and read on start-up
 - add labels to canvas blocks
 - clean up code
     - remove DEBUG's & print's
