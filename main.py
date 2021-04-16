@@ -23,7 +23,7 @@ class memBlockClass:
         self.size      = p_size
 
 # Update memBlocks array after a process is alloced
-def allocMemBlocks(a_memBlocks, blockIndex, proc, plist):
+def allocMemBlocks(a_memBlocks, blockIndex, proc, a_plist):
 
     # Split alloced block into alloced and free segments
     allocSize = proc.size
@@ -36,12 +36,12 @@ def allocMemBlocks(a_memBlocks, blockIndex, proc, plist):
         insertIndex = blockIndex + 1
         temp = memBlockClass(False, freeSize)
         a_memBlocks.insert(insertIndex, temp)
-        for i in plist:
+        for i in a_plist:
             if i.alloc >= blockIndex+1:
                 i.alloc += 1;
 
 # Update memBlocks array after a process is freed
-def freeMemBlocks(canvas, f_memBlocks, proc, plist):
+def freeMemBlocks(canvas, f_memBlocks, proc, f_plist):
 
     #DEBUG
 #    print("freeMemBlocks()")
@@ -59,6 +59,12 @@ def freeMemBlocks(canvas, f_memBlocks, proc, plist):
 #    for i in range(len(f_memBlocks)):
 #        print("[", end="")
 #        print(str(f_memBlocks[i].allocFlag) + ", " + str(f_memBlocks[i].size) + "]")
+
+    #DEBUG
+    if proc.alloc >= len(f_memBlocks):
+        print("freeMemBlocks index out of range")
+        while 1:
+            print("", end='')
 
     blockIndex = proc.alloc                 # Index of block being freed
 
@@ -81,7 +87,7 @@ def freeMemBlocks(canvas, f_memBlocks, proc, plist):
         f_memBlocks[blockIndex].size += f_memBlocks[rightIndex].size
         f_memBlocks.pop(rightIndex)
 
-        for i in plist:
+        for i in f_plist:
             if i.alloc > rightIndex:
                 i.alloc -= 1
 
@@ -93,7 +99,7 @@ def freeMemBlocks(canvas, f_memBlocks, proc, plist):
         f_memBlocks[leftIndex].size += f_memBlocks[blockIndex].size
         f_memBlocks.pop(blockIndex)
 
-        for i in plist:
+        for i in f_plist:
             if i.alloc > blockIndex:
                 i.alloc -= 1;
 
@@ -106,15 +112,15 @@ def freeMemBlocks(canvas, f_memBlocks, proc, plist):
 #        print(str(f_memBlocks[i].allocFlag) + ", " + str(f_memBlocks[i].size) + "]")
 
 # Removes a TTL from a running proccess and reallocs the space if process is complete
-def runProccess(canvas, r_memBlocks, plist):
-    for obj in plist:
-        if obj.alloc > -1:
+def runProccess(canvas, r_memBlocks, r_plist):
+    for obj in r_plist:
+        if obj.alloc != -1:
             obj.TTL -= 1
-            if obj.TTL == 0:
-                freeMemBlocks(canvas, r_memBlocks, obj, plist)
+            if obj.TTL <= 0:
+                freeMemBlocks(canvas, r_memBlocks, obj, r_plist)
 
 # blocks as per First fit algorithm
-def firstFit(ff_memBlocks, m, proc, plist):
+def firstFit(ff_memBlocks, m, proc, ff_plist):
 
     # Initially no block is assigned to any process
 
@@ -127,7 +133,7 @@ def firstFit(ff_memBlocks, m, proc, plist):
             proc.alloc = j
 
             # Update memory allocation state
-            allocMemBlocks(ff_memBlocks, j, proc, plist)
+            allocMemBlocks(ff_memBlocks, j, proc, ff_plist)
 
             break
 
@@ -136,7 +142,7 @@ def firstFit(ff_memBlocks, m, proc, plist):
     else:
         return -1
 
-def bestFit(bf_memBlocks, m, proc, plist):
+def bestFit(bf_memBlocks, m, proc, bf_plist):
 
     # Find the best fit block for current process
     bestIdx = -1
@@ -154,14 +160,14 @@ def bestFit(bf_memBlocks, m, proc, plist):
         proc.alloc = bestIdx
 
         # Update memory allocation state
-        allocMemBlocks(bf_memBlocks, bestIdx, proc, plist)
+        allocMemBlocks(bf_memBlocks, bestIdx, proc, bf_plist)
 
     if proc.alloc != -1:
         return 0
     else:
         return -1
 
-def worstFit(wf_memBlocks, m, proc, plist):
+def worstFit(wf_memBlocks, m, proc, wf_plist):
 
     # Find the worst fit block for current process
     wstIdx = -1
@@ -189,7 +195,7 @@ def worstFit(wf_memBlocks, m, proc, plist):
         proc.alloc = wstIdx
 
         # Update memory allocation state
-        allocMemBlocks(wf_memBlocks, wstIdx, proc, plist)
+        allocMemBlocks(wf_memBlocks, wstIdx, proc, wf_plist)
 
     if proc.alloc != -1:
         return 0
@@ -202,14 +208,9 @@ def start_CB(*proccess):
 
 def exit_CB():
     root.destroy()
-    global quit_flag
-    quit_flag = 1
 
 global start_flag
 start_flag = 0
-
-global quit_flag
-quit_flag = 0
 
 # Make window for GUI
 root = tk.Tk()
@@ -303,38 +304,37 @@ for i in range(len(og_memBlocks)):
 
 
 #create the process list
-plist = []
+plist_ff = []
+plist_bf = []
+plist_wf = []
 for i in range(3):
-    plist.append(proccessClass(i+1,np.random.randint(1,151), np.random.randint(1,5)))
+    randSize = np.random.randint(1,151)
+    randTime = np.random.randint(1,5)
+    plist_ff.append(proccessClass(i+1, randSize, randTime))
+    plist_bf.append(proccessClass(i+1, randSize, randTime))
+    plist_wf.append(proccessClass(i+1, randSize, randTime))
 print("Initially create list")
 print("---------------------")
-for obj in plist:
+for obj in plist_ff:
     print(obj.PID, obj.size, obj.TTL)
 
 
-draw_list = []
 count = 0
 
-#initialize all three sims
-plist_ff = plist.copy()
+# Initialize all three sims
 blocks_ff = []
 blocks_ff.append(memBlockClass(False, MEM_SIZE))
 currProc_ff = 0
 
-plist_bf = plist.copy()
 blocks_bf = []
 blocks_bf.append(memBlockClass(False, MEM_SIZE))
 currProc_bf = 0
 
-plist_wf = plist.copy()
 blocks_wf = []
 blocks_wf.append(memBlockClass(False, MEM_SIZE))
 currProc_wf = 0
 
 while 1:
-
-    if quit_flag == 1:
-        quit(0)
 
     try:
         time_label.config(text="Time: " + str(count))
@@ -342,7 +342,7 @@ while 1:
     except:
         quit(0)
 
-#    if start_flag == 1 and currProc_ff < len(plist) and currProc_bf < len(plist) and currProc_wf < len(plist):
+    # Wait for start button to be pressed to start sim
     if start_flag == 1:
 
         ########################################
@@ -364,8 +364,8 @@ while 1:
                 print("[", end="")
                 print(str(blocks_ff[i].allocFlag) + ", " + str(blocks_ff[i].size) + "]")
 
-        if currProc_ff < len(plist):
-            ret = firstFit(blocks_ff, len(blocks_ff), plist_ff[currProc_ff], plist_ff)
+        if currProc_ff < len(plist_ff):
+            ret_ff = firstFit(blocks_ff, len(blocks_ff), plist_ff[currProc_ff], plist_ff)
 
             #DEBUG
             if print_ff == 1:
@@ -382,99 +382,99 @@ while 1:
                     print(str(blocks_ff[i].allocFlag) + ", " + str(blocks_ff[i].size) + "]")
 
 
-            if ret == 0:
+            if ret_ff == 0:
                 drawBox(canvas, 1, blocks_ff, plist_ff[currProc_ff])
                 currProc_ff += 1
 
         #--------------------------Best Fit-----------------------------
 
         #DEBUG
-#        print_bf = 1
-##        print("BF")
-#
-#        runProccess(canvas, blocks_bf, plist_bf)
-#
-#        #DEBUG
-#        if print_bf == 1:
-#            print("\nBest Fit Block List")
-#            print("Before: ", end = "")
-#            print("(allocFlag, size)")
-#            for i in range(len(blocks_bf)):
-#                print("[", end="")
-#                print(str(blocks_bf[i].allocFlag) + ", " + str(blocks_bf[i].size) + "]")
-#            print("Best Fit P List")
-#            print("Before: ", end="")
-#            for i in range(len(plist_bf)):
-#                print(plist_bf[i].alloc)
-#
-#
-#        if currProc_bf < len(plist):
-#            ret = bestFit(blocks_bf, len(blocks_bf), plist_bf[currProc_bf], plist_bf)
-#
-#            #DEBUG
-#            if print_bf == 1:
-#                print(" Process No.\tProcess Size\tBlock no.")
-#                print(" ",plist_bf[currProc_bf].PID, "\t\t", plist_bf[currProc_bf].size, "\t\t", end = " ")
-#                if plist_bf[currProc_bf].alloc != -1:
-#                    print(plist_bf[currProc_bf].alloc + 1)
-#                else:
-#                    print("Not Allocated")
-#                print("After : ", end = "")
-#                print("(allocFlag, size)")
-#                for i in range(len(blocks_bf)):
-#                    print("[", end="")
-#                    print(str(blocks_bf[i].allocFlag) + ", " + str(blocks_bf[i].size) + "]")
-#
-#                print("Best Fit P List")
-#                print("After: ", end="")
-#                for i in range(len(plist_bf)):
-#                    print(plist_bf[i].alloc)
-#
-#            if ret == 0:
-#                drawBox(canvas, 2, blocks_bf, plist_bf[currProc_bf])
-#                currProc_bf += 1
+        print_bf = 1
+#        print("BF")
+
+        runProccess(canvas, blocks_bf, plist_bf)
+
+        #DEBUG
+        if print_bf == 1:
+            print("\nBest Fit Block List")
+            print("Before: ", end = "")
+            print("(allocFlag, size)")
+            for i in range(len(blocks_bf)):
+                print("[", end="")
+                print(str(blocks_bf[i].allocFlag) + ", " + str(blocks_bf[i].size) + "]")
+            print("Best Fit P List")
+            print("Before: ", end="")
+            for i in range(len(plist_bf)):
+                print(plist_bf[i].alloc)
+
+
+        if currProc_bf < len(plist_bf):
+            ret_bf = bestFit(blocks_bf, len(blocks_bf), plist_bf[currProc_bf], plist_bf)
+
+            #DEBUG
+            if print_bf == 1:
+                print(" Process No.\tProcess Size\tBlock no.")
+                print(" ",plist_bf[currProc_bf].PID, "\t\t", plist_bf[currProc_bf].size, "\t\t", end = " ")
+                if plist_bf[currProc_bf].alloc != -1:
+                    print(plist_bf[currProc_bf].alloc + 1)
+                else:
+                    print("Not Allocated")
+                print("After : ", end = "")
+                print("(allocFlag, size)")
+                for i in range(len(blocks_bf)):
+                    print("[", end="")
+                    print(str(blocks_bf[i].allocFlag) + ", " + str(blocks_bf[i].size) + "]")
+
+                print("Best Fit P List")
+                print("After: ", end="")
+                for i in range(len(plist_bf)):
+                    print(plist_bf[i].alloc)
+
+            if ret_bf == 0:
+                drawBox(canvas, 2, blocks_bf, plist_bf[currProc_bf])
+                currProc_bf += 1
 
         #--------------------------Worst Fit-----------------------------
 
         #DEBUG
-#        print_wf = 1;
-##        print("WF")
-#
-#        runProccess(canvas, blocks_wf, plist_wf)
-#
-#        #DEBUG
-#        if print_wf == 1:
-#            print("\nWorst Fit Block List")
-#            print("Before: ", end = "")
-#            print("(allocFlag, size)")
-#            for i in range(len(blocks_wf)):
-#                print("[", end="")
-#                print(str(blocks_wf[i].allocFlag) + ", " + str(blocks_wf[i].size) + "]")
-#
-#        if currProc_wf < len(plist):
-#            ret = worstFit(blocks_wf, len(blocks_wf), plist_wf[currProc_wf], plist_wf)
-#
-#            #DEBUG
-#            if print_wf == 1:
-#                print(" Process No.\tProcess Size\tBlock no.")
-#                print(" ",plist_wf[currProc_wf].PID, "\t\t", plist_wf[currProc_wf].size, "\t\t", end = " ")
-#                if plist_wf[currProc_wf].alloc != -1:
-#                    print(plist_wf[currProc_wf].alloc + 1)
-#                else:
-#                    print("Not Allocated")
-#                print("After : ", end = "")
-#                for i in range(len(blocks_wf)):
-#                    print("[", end="")
-#                    print(str(blocks_wf[i].allocFlag) + ", " + str(blocks_wf[i].size) + "]")
-#
-#                print("Worst Fit P List")
-#                print("After: ", end="")
-#                for i in range(len(plist_wf)):
-#                    print(plist_wf[i].alloc)
-#
-#            if ret == 0:
-#                drawBox(canvas, 3, blocks_wf, plist_wf[currProc_wf])
-#                currProc_wf += 1
+        print_wf = 1;
+#        print("WF")
+
+        runProccess(canvas, blocks_wf, plist_wf)
+
+        #DEBUG
+        if print_wf == 1:
+            print("\nWorst Fit Block List")
+            print("Before: ", end = "")
+            print("(allocFlag, size)")
+            for i in range(len(blocks_wf)):
+                print("[", end="")
+                print(str(blocks_wf[i].allocFlag) + ", " + str(blocks_wf[i].size) + "]")
+
+        if currProc_wf < len(plist_wf):
+            ret_wf = worstFit(blocks_wf, len(blocks_wf), plist_wf[currProc_wf], plist_wf)
+
+            #DEBUG
+            if print_wf == 1:
+                print(" Process No.\tProcess Size\tBlock no.")
+                print(" ",plist_wf[currProc_wf].PID, "\t\t", plist_wf[currProc_wf].size, "\t\t", end = " ")
+                if plist_wf[currProc_wf].alloc != -1:
+                    print(plist_wf[currProc_wf].alloc + 1)
+                else:
+                    print("Not Allocated")
+                print("After : ", end = "")
+                for i in range(len(blocks_wf)):
+                    print("[", end="")
+                    print(str(blocks_wf[i].allocFlag) + ", " + str(blocks_wf[i].size) + "]")
+
+                print("Worst Fit P List")
+                print("After: ", end="")
+                for i in range(len(plist_wf)):
+                    print(plist_wf[i].alloc)
+
+            if ret_wf == 0:
+                drawBox(canvas, 3, blocks_wf, plist_wf[currProc_wf])
+                currProc_wf += 1
 
         ########################################
 
