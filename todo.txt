@@ -1,2 +1,4 @@
 - make proc sequence static, not random
 - add labels to canvas blocks
+- clean up code
+    - remove DEBUG's & print's

@@ -353,6 +353,18 @@ while 1:
         print_ff = 1
 #        print("FF")
 
+        nextProc_ff = currProc_ff + 1
+        if nextProc_ff < len(plist_ff):
+            try:
+                first_label.config(text="First\n  Next: "+str(plist_ff[nextProc_ff].size))
+            except:
+                quit(0)
+        else:
+            try:
+                first_label.config(text="First\n  Next: ")
+            except:
+                quit(0)
+
         runProccess(canvas, blocks_ff, plist_ff)
 
         #DEBUG
@@ -391,6 +403,18 @@ while 1:
         #DEBUG
         print_bf = 1
 #        print("BF")
+
+        nextProc_bf = currProc_bf + 1
+        if nextProc_bf < len(plist_bf):
+            try:
+                best_label.config(text="Best\n  Next: "+str(plist_bf[nextProc_bf].size))
+            except:
+                quit(0)
+        else:
+            try:
+                best_label.config(text="Best\n  Next: ")
+            except:
+                quit(0)
 
         runProccess(canvas, blocks_bf, plist_bf)
 
@@ -439,6 +463,18 @@ while 1:
         #DEBUG
         print_wf = 1;
 #        print("WF")
+
+        nextProc_wf = currProc_wf + 1
+        if nextProc_wf < len(plist_wf):
+            try:
+                worst_label.config(text="  Worst\n  Next: "+str(plist_wf[nextProc_wf].size))
+            except:
+                quit(0)
+        else:
+            try:
+                worst_label.config(text="  Worst\n  Next: ")
+            except:
+                quit(0)
 
         runProccess(canvas, blocks_wf, plist_wf)
 
