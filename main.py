@@ -200,9 +200,9 @@ best_label  = tk.Label(root, text="Best\n  Next: ")
 worst_label = tk.Label(root, text="  Worst\n  Next: ")
 time_label  = tk.Label(root, text="Time: ")
 
-first_label.place(x=bar1_x + canvasOffset + 5, y=barHeight + 10)
-best_label.place( x=bar2_x + canvasOffset + 5, y=barHeight + 10)
-worst_label.place(x=bar3_x + canvasOffset + 5, y=barHeight + 10)
+first_label.place(x=bar1_x + canvasOffset, y=barHeight + 10)
+best_label.place( x=bar2_x + canvasOffset, y=barHeight + 10)
+worst_label.place(x=bar3_x + canvasOffset, y=barHeight + 10)
 
 
 # Add remaining Elements to root
