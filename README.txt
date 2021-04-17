@@ -1,4 +1,4 @@
 Dependants:
-- Tk 8.6.11 (yay tk --> 65)
-- Tcl 8.6.11? (yay tcl --> 3)
-- Python 3.9 (yay python --> 13)
+- Tk 8.6.11
+- Python 3.9
+- Tcl 8.6.11 (may not be needed)
