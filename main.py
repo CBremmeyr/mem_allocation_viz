@@ -7,7 +7,7 @@ import csv
 import tkinter as tk
 from tkinter import ttk
 
-MEM_SIZE = 500
+MEM_SIZE = 500 #size of the initial empty memory block
 
 class proccessClass:
     def __init__(self, p_PID, p_size, p_time):
@@ -88,10 +88,7 @@ def runProccess(canvas, r_memBlocks, r_plist):
 # blocks as per First fit algorithm
 def firstFit(ff_memBlocks, m, proc, ff_plist):
 
-    # Initially no block is assigned to any process
-
-    # pick each process and find suitable blocks
-    # according to its size ad assign to it
+    #find the first available block to fit the process in
     for j in range(m):
         if ff_memBlocks[j].size >= proc.size and not ff_memBlocks[j].allocFlag:
 
@@ -119,7 +116,7 @@ def bestFit(bf_memBlocks, m, proc, bf_plist):
             elif bf_memBlocks[bestIdx].size > bf_memBlocks[j].size:
                 bestIdx = j
 
-    # If we could find a block for current process
+    # If found a block for current process
     if bestIdx != -1:
 
         # allocate block j to p[i] process
@@ -137,7 +134,6 @@ def worstFit(wf_memBlocks, m, proc, wf_plist):
 
     # Find the worst fit block for current process
     wstIdx = -1
-#    for j in range(m):
     for j in range(len(wf_memBlocks)):
         if wf_memBlocks[j].size >= proc.size and not wf_memBlocks[j].allocFlag:
             if wstIdx == -1:
@@ -204,7 +200,6 @@ first_label.place(x=bar1_x + canvasOffset, y=barHeight + 10)
 best_label.place( x=bar2_x + canvasOffset, y=barHeight + 10)
 worst_label.place(x=bar3_x + canvasOffset, y=barHeight + 10)
 
-
 # Add remaining Elements to root
 time_label.place( x=400, y=700)
 
@@ -245,7 +240,6 @@ def drawBox(canvas, barType, d_memBlocks, proc):
                 fill="white")
     except:
         quit(0)
-
 
 # Make background rectangles for memory spaces
 canvas.create_rectangle(bar1_x, barTop, bar1_x + barWidth, 1+barTop, fill = 'black')
@@ -295,8 +289,6 @@ while 1:
 
     # Wait for start button to be pressed to start sim
     if start_flag == 1:
-
-        ########################################
 
         #--------------------------First Fit-----------------------------
         nextProc_ff = currProc_ff + 1
@@ -367,7 +359,6 @@ while 1:
             except:
                 quit(0)
 
-        ########################################
 
         # Increment time
         count += 1
