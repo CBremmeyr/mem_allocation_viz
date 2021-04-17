@@ -16,6 +16,7 @@ class proccessClass:
         self.TTL   = p_time
         self.alloc = -1
         self.box   = None
+        self.text  = None
 
 class memBlockClass:
     def __init__(self, p_allocFlag, p_size):
@@ -45,6 +46,7 @@ def freeMemBlocks(canvas, f_memBlocks, proc, f_plist):
 
     # Remove block from canvas
     canvas.delete(proc.box)
+    canvas.delete(proc.text)
 
     blockIndex = proc.alloc # Index of block being freed
 
@@ -230,10 +232,17 @@ def drawBox(canvas, barType, d_memBlocks, proc):
 
     for i in range(proc.alloc):
         pBox_y += d_memBlocks[i].size
+
     pBox_size = proc.size
     offSet = barTop + pBox_y
     proc.box = canvas.create_rectangle(pBox_x, offSet, pBox_x + barWidth,
             pBox_size + offSet, fill = 'blue')
+
+    proc.text = canvas.create_text(pBox_x, offSet,
+            text="PID " + str(proc.PID) + "\nsize " + str(proc.size),
+            anchor="nw",
+            fill="white")
+
 
 # Make background rectangles for memory spaces
 canvas.create_rectangle(bar1_x, barTop, bar1_x + barWidth, 1+barTop, fill = 'black')
@@ -364,7 +373,7 @@ while 1:
         ########################################
 
         # Increment time
-        count = count + 1
+        count += 1
         try:
             root.update()
         except:
