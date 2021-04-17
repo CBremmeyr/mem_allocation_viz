@@ -235,13 +235,16 @@ def drawBox(canvas, barType, d_memBlocks, proc):
 
     pBox_size = proc.size
     offSet = barTop + pBox_y
-    proc.box = canvas.create_rectangle(pBox_x, offSet, pBox_x + barWidth,
-            pBox_size + offSet, fill = 'blue')
 
-    proc.text = canvas.create_text(pBox_x, offSet,
-            text="PID " + str(proc.PID) + "\nsize " + str(proc.size),
-            anchor="nw",
-            fill="white")
+    try:
+        proc.box = canvas.create_rectangle(pBox_x, offSet, pBox_x + barWidth,
+                pBox_size + offSet, fill = 'blue')
+        proc.text = canvas.create_text(pBox_x, offSet,
+                text="PID " + str(proc.PID) + "\nsize " + str(proc.size),
+                anchor="nw",
+                fill="white")
+    except:
+        quit(0)
 
 
 # Make background rectangles for memory spaces
@@ -266,12 +269,6 @@ for row in csvReader:
     plist_ff.append(proccessClass(pid, size, ttl))
     plist_bf.append(proccessClass(pid, size, ttl))
     plist_wf.append(proccessClass(pid, size, ttl))
-
-print("Initially create list")
-print("---------------------")
-for obj in plist_ff:
-    print(obj.PID, obj.size, obj.TTL)
-
 
 count = 0
 
